@@ -10,9 +10,9 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func handler(ctx context.Context, request events.SQSEvent) error {
+func handler(_ context.Context, request events.SQSEvent) error {
 
-	fmt.Printf("Total records received to send to Slack: %d", len(request.Records))
+	fmt.Printf("Total records received to send to Slack: %d\n", len(request.Records))
 
 	for i, r := range request.Records {
 		if err := slack.PostWebhook(os.Getenv("SLACK_WEBHOOK"), &slack.WebhookMessage{
@@ -20,7 +20,7 @@ func handler(ctx context.Context, request events.SQSEvent) error {
 		}); err != nil {
 			return fmt.Errorf("error posting message with webhook: %w", err)
 		}
-		fmt.Printf("Message %d sent", i+1)
+		fmt.Printf("Message %d sent\n", i+1)
 	}
 
 	fmt.Println("All messages sent successfully")
